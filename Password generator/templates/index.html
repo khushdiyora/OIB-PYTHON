@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Advanced Password Generator</h1>
+        <form id="password-form" class="mt-4">
+            <div class="form-group">
+                <label for="length">Password Length</label>
+                <input type="number" id="length" name="length" class="form-control" value="12" min="1">
+            </div>
+            <div class="form-group">
+                <label for="complexity">Password Complexity</label>
+                <select id="complexity" name="complexity" class="form-control">
+                    <option value="1">Letters Only</option>
+                    <option value="2">Letters and Digits</option>
+                    <option value="3">Letters, Digits, and Special Characters</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Password</button>
+        </form>
+        <div id="result" class="mt-4">
+            <h4>Password:</h4>
+            <input type="text" id="password" class="form-control" readonly>
+            <button id="copy" class="btn btn-secondary mt-2">Copy to Clipboard</button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#password-form').on('submit', function(e) {
+                e.preventDefault();
+                $.post('/generate_password', $(this).serialize(), function(data) {
+                    $('#password').val(data.password);
+                });
+            });
+
+            $('#copy').on('click', function() {
+                var copyText = $('#password').val();
+                navigator.clipboard.writeText(copyText).then(function() {
+                    alert('Password copied to clipboard');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
